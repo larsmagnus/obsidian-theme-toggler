@@ -1,0 +1,3 @@
+[class^="workspace-"]:is(.theme-light, .theme-dark) {
+  color: var(--text-normal);
+}
