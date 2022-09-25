@@ -2,7 +2,7 @@
   "id": "obsidian-theme-toggler",
   "name": "Theme Toggler",
   "description": "Toggle the theme in Obsidian's panels.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "minAppVersion": "0.15.9",
   "isDesktopOnly": true,
   "author": "larsmagnus",
