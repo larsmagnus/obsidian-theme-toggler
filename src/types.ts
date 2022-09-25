@@ -1,3 +1,5 @@
+import { PluginThemeTypes } from './PluginThemesEnum'
+
 declare module 'obsidian' {
 	interface App {
 		commands: {
@@ -16,12 +18,11 @@ export interface ButtonBase {
 	name: string
 }
 
-export type Themes = 'light' | 'dark' | null
+export type Themes = PluginThemeTypes | null
 
 export interface ThemeToggleSettings {
 	buttonSettings: ButtonBase
 	leafSettings: LeafSettings[]
-	appTheme: Themes
 }
 
 interface LeafSettings {
