@@ -2,7 +2,7 @@
 
 custom:
   [
-    https://www.buymeacoffee.com/larsmagnus,
-    https://www.paypal.com/paypalme/larsmag/10aud,
+    'https://www.buymeacoffee.com/larsmagnus',
+    'https://www.paypal.com/paypalme/larsmag/10aud',
   ]
 ko_fi: larsmagnus
