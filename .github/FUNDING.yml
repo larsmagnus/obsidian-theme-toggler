@@ -1,8 +1,9 @@
 # https://docs.github.com/en/github/administering-a-repository/managing-repository-settings/displaying-a-sponsor-button-in-your-repository
 
+github: larsmagnus
+ko_fi: larsmagnus
 custom:
   [
     'https://www.buymeacoffee.com/larsmagnus',
     'https://www.paypal.com/paypalme/larsmag/10aud',
   ]
-ko_fi: larsmagnus
