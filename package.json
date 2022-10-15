@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-theme-toggler",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Toggle the theme in Obsidian's panels.",
 	"main": "main.js",
 	"scripts": {

@@ -8,6 +8,7 @@ import {
 	PLUGIN_ID,
 	PLUGIN_CLASS_NAME,
 	PLUGIN_MODES,
+	BUTTON_SETTINGS,
 	DEFAULT_SETTINGS,
 } from './constants'
 import { getToggleThemeLabel, COMMAND_DESC } from './lang'
@@ -27,21 +28,12 @@ export default class ThemeToggler extends Plugin {
 		const iconSize = getIconSize()
 		const classNames = ['view-action', 'clickable-icon', PLUGIN_CLASS_NAME]
 		const buttonIcon = getButtonIcon(name, id, icon, iconSize, classNames)
-		const pluginId = this.manifest.id
+
+		buttonIcon.addEventListener('click', () => {
+			this.toggleTheme()
+		})
 
 		viewActions.prepend(buttonIcon)
-
-		/**
-		 * Ensure the pane is activated when clicked,
-		 * to not execute commands on the previously active pane.
-		 */
-		this.registerDomEvent(buttonIcon, 'mousedown', (evt) => {
-			if (evt.button === 0) {
-				setTimeout(() => {
-					this.app.commands.executeCommandById(`${pluginId}:${id}`)
-				}, 5) // use a timeout of 5 for slow devices
-			}
-		})
 	}
 
 	addButtonToLeaf(leaf: WorkspaceLeaf, button: ButtonBase) {
@@ -63,7 +55,7 @@ export default class ThemeToggler extends Plugin {
 
 	addButtonToAllLeaves() {
 		app.workspace.iterateAllLeaves((leaf) =>
-			this.addButtonToLeaf(leaf, this.settings.buttonSettings)
+			this.addButtonToLeaf(leaf, BUTTON_SETTINGS)
 		)
 		app.workspace.onLayoutChange()
 	}
@@ -79,7 +71,8 @@ export default class ThemeToggler extends Plugin {
 	setThemeForAllLeaves() {
 		if (this.settings.leafSettings.length > 0) {
 			this.settings.leafSettings.forEach(({ id, theme }) => {
-				const leaf = this.app.workspace.getLeafById(id)?.view.containerEl
+				const leaf =
+					this.app.workspace.getLeafById(id)?.view.containerEl.parentNode
 
 				this.setThemeForLeaf(leaf, theme)
 			})
@@ -106,19 +99,8 @@ export default class ThemeToggler extends Plugin {
 			className.includes('theme')
 		)[0]
 		const hasDarkTheme = themeClassName?.includes('dark')
-		const hasLightTheme = themeClassName?.includes('light')
-
-		// Fall back to the app's theme if none are set
-		if (!hasDarkTheme && !hasLightTheme) {
-			return this.getAppTheme()
-		}
 
 		return hasDarkTheme ? 'dark' : 'light'
-	}
-
-	// Default theme for the entire application
-	getAppTheme(): Themes {
-		return this.getThemeFromNode(document.body) || 'light'
 	}
 
 	// If the leaf doesn't exist, then delete its data and save
@@ -139,7 +121,7 @@ export default class ThemeToggler extends Plugin {
 
 	toggleTheme(theme?: Themes) {
 		const leaf = this.app.workspace.getMostRecentLeaf() as any
-		const activeLeaf = leaf?.view.containerEl
+		const activeLeaf = leaf?.view.containerEl.parentNode
 
 		const leafTheme = this.getThemeFromNode(activeLeaf)
 		const inactiveTheme = leafTheme === 'light' ? 'dark' : 'light'
@@ -164,7 +146,6 @@ export default class ThemeToggler extends Plugin {
 		await this.loadSettings()
 
 		this.app.workspace.onLayoutReady(() => {
-			this.getAppTheme()
 			this.addButtonToAllLeaves()
 			this.setThemeForAllLeaves()
 		})
@@ -181,7 +162,7 @@ export default class ThemeToggler extends Plugin {
 				const activeLeaf = app.workspace.getActiveViewOfType(View)
 				if (!activeLeaf) return
 
-				this.addButtonToLeaf(activeLeaf.leaf, this.settings.buttonSettings)
+				this.addButtonToLeaf(activeLeaf.leaf, BUTTON_SETTINGS)
 			})
 		)
 	}
@@ -190,9 +171,6 @@ export default class ThemeToggler extends Plugin {
 		console.log(`${this.manifest.name} Plugin unloaded.`)
 
 		removeAllViewActionsButtons()
-
-		// Reset all data to have a clean slate for re-activation
-		await this.saveSettings(DEFAULT_SETTINGS)
 	}
 
 	async loadSettings() {

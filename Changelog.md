@@ -1,2 +1,3 @@
+- 2022-10-15 Obsidian 1.0.0 support
 - 2022-09-25 Stable release
 - 2022-09-25 Initial commit
