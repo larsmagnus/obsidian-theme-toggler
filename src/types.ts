@@ -21,7 +21,6 @@ export interface ButtonBase {
 export type Themes = PluginThemeTypes | null
 
 export interface ThemeToggleSettings {
-	buttonSettings: ButtonBase
 	leafSettings: LeafSettings[]
 }
 
